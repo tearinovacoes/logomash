@@ -1,24 +1,23 @@
 <?php
 	
 	//die(getenv("DATABASE_URL"));
-	$dbc=parse_url(getenv("DATABASE_URL"));
-	
-    $host = $dbc["host"];
-    $user = $dbc["user"];
-    $dbname = ltrim($dbc["path"],'/');
-    $pass = $dbc["pass"];
-    $port = $dbc["port"];
-	
-	pg_connect ('port='.$port.' sslmode=require host='.$host.' user='.$user.' dbname='.$dbname.' password='.$pass);  
+$dbopts = parse_url(getenv('DATABASE_URL'));
+$app->register(new Herrera\Pdo\PdoServiceProvider(),
+               array(
+                   'pdo.dsn' => 'pgsql:dbname='.ltrim($dbopts["path"],'/').';host='.$dbopts["host"] . ';port=' . $dbopts["port"],
+                   'pdo.username' => $dbopts["user"],
+                   'pdo.password' => $dbopts["pass"]
+               )
+); 
 	
 	$using="use logomashed";
-	$query=pg_query($dbc, "select * from logomashed") or die ("Here it broke");
+	$query=pg_query($dbopts, "select * from logomashed") or die ("Here it broke");
 		if($_REQUEST!=NULL){
 		$winner=$_REQUEST['won'];
 		$loser=$_REQUEST['lost'];
 		$base_rating=1400;
-		$query2=pg_fetch_array(pg_query($dbc, "select rating from logomashed where id=$winner"));
-		$query3=pg_fetch_array(pg_query($dbc, "select rating from logomashed where id=$loser"));
+		$query2=pg_fetch_array(pg_query($dbopts, "select rating from logomashed where id=$winner"));
+		$query3=pg_fetch_array(pg_query($dbopts, "select rating from logomashed where id=$loser"));
 		$winner_rating=$query2['rating'];
 		$loser_rating=$query3['rating'];
 
@@ -34,8 +33,8 @@
 			$winner_rating = $winner_rating + $Kw*(1-$prob_winner);
 			$loser_rating = $loser_rating + $Kw*(0-$prob_loser);
 
-		$updatequery=pg_query($dbc,"update logomashed set rating=$winner_rating where id=$winner") or die(pg_error($dbc));
-		$updatequery=pg_query($dbc,"update logomashed set rating=$loser_rating where id=$loser") or die(pg_error($dbc));
+		$updatequery=pg_query($dbopts,"update logomashed set rating=$winner_rating where id=$winner") or die(pg_error($dbopts));
+		$updatequery=pg_query($dbopts,"update logomashed set rating=$loser_rating where id=$loser") or die(pg_error($dbopts));
 	}
 		
 		//This variable tells the total number of pics. Update it.
@@ -49,8 +48,8 @@
 			$random2=rand(1,$max_ppl);
 		}
 
-		$rating1=pg_fetch_array(pg_query($dbc,"select rating from logomashed where id=$random1"));
-		$rating2=pg_fetch_array(pg_query($dbc,"select rating from logomashed where id=$random2"));
+		$rating1=pg_fetch_array(pg_query($dbopts,"select rating from logomashed where id=$random1"));
+		$rating2=pg_fetch_array(pg_query($dbopts,"select rating from logomashed where id=$random2"));
 		$ratingA=$rating1['rating'];
 		$ratingB=$rating2['rating'];
 
