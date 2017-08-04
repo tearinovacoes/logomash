@@ -8,5 +8,7 @@
             "email": "williandeavila@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "herrera-io/silex-pdo": "^1.2"
+    }
 }
