@@ -1,15 +1,15 @@
 <?php
 	
 
-	$dbc=mysqli_connect('localhost','root','','facemash') or die(mysqli_error());
+	$dbc=pg_connect ("host=localhost dbname=facemash1 port=5432 user=postgres password=1q2w3e") or die(pg_error());
 	$using="use facemash";
-	$query=mysqli_query($dbc, "select *from facemashed") or die ("Here it broke");
+	$query=pg_query($dbc, "select *from facemashed") or die ("Here it broke");
 		if($_REQUEST!=NULL){
 		$winner=$_REQUEST['won'];
 		$loser=$_REQUEST['lost'];
 		$base_rating=1400;
-		$query2=mysqli_fetch_array(mysqli_query($dbc, "select rating from facemashed where id=$winner"));
-		$query3=mysqli_fetch_array(mysqli_query($dbc, "select rating from facemashed where id=$loser"));
+		$query2=pg_fetch_array(pg_query($dbc, "select rating from facemashed where id=$winner"));
+		$query3=pg_fetch_array(pg_query($dbc, "select rating from facemashed where id=$loser"));
 		$winner_rating=$query2['rating'];
 		$loser_rating=$query3['rating'];
 
@@ -25,12 +25,12 @@
 			$winner_rating = $winner_rating + $Kw*(1-$prob_winner);
 			$loser_rating = $loser_rating + $Kw*(0-$prob_loser);
 
-		$updatequery=mysqli_query($dbc,"update facemashed set rating=$winner_rating where id=$winner") or die(mysqli_error($dbc));
-		$updatequery=mysqli_query($dbc,"update facemashed set rating=$loser_rating where id=$loser") or die(mysqli_error($dbc));
+		$updatequery=pg_query($dbc,"update facemashed set rating=$winner_rating where id=$winner") or die(pg_error($dbc));
+		$updatequery=pg_query($dbc,"update facemashed set rating=$loser_rating where id=$loser") or die(pg_error($dbc));
 	}
 		
 		//This variable tells the total number of pics. Update it.
-		$max_ppl=80;
+		$max_ppl=6;
 
 		$random1= rand(1,$max_ppl);
 		$random2=rand(1,$max_ppl);
@@ -40,8 +40,8 @@
 			$random2=rand(1,$max_ppl);
 		}
 
-		$rating1=mysqli_fetch_array(mysqli_query($dbc,"select rating from facemashed where id=$random1"));
-		$rating2=mysqli_fetch_array(mysqli_query($dbc,"select rating from facemashed where id=$random2"));
+		$rating1=pg_fetch_array(pg_query($dbc,"select rating from facemashed where id=$random1"));
+		$rating2=pg_fetch_array(pg_query($dbc,"select rating from facemashed where id=$random2"));
 		$ratingA=$rating1['rating'];
 		$ratingB=$rating2['rating'];
 
@@ -63,7 +63,7 @@
 	<div class="pics-container">
 	<table class="pics">
 	<tr>
-	<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="facepics/Image(<?php echo $random1; ?>).jpg" class="images"/></a></td>
+	<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="facepics/image(<?php echo $random1; ?>).jpg" class="images"/></a></td>
 	<td>OR</td>
 	<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="facepics/image(<?php echo $random2; ?>).jpg" class="images"/></a></td>
 	<tr>
