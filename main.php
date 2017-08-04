@@ -1,8 +1,7 @@
 <?php
 	
 	//die(getenv("DATABASE_URL"));
-
- 	$dbc=parse_url(getenv("DATABASE_URL"));
+	$dbc=parse_url(getenv("DATABASE_URL"));
 	
     $host = $dbc["host"];
     $user = $dbc["user"];
@@ -10,7 +9,7 @@
     $pass = $dbc["pass"];
     $port = $dbc["port"];
 	
-	pg_connect ('port='.$port.' sslmode=require host='.$host.' user='.$user.' dbname='.$dbname.' password='.$pass); 
+	pg_connect ('port='.$port.' sslmode=require host='.$host.' user='.$user.' dbname='.$dbname.' password='.$pass);  
 	
 	$using="use logomashed";
 	$query=pg_query($dbc, "select * from logomashed") or die ("Here it broke");

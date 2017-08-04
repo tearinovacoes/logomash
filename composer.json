@@ -1,0 +1,12 @@
+{
+    "name": "vendor/composer",
+    "description": "composer",
+    "type": "library",
+    "authors": [
+        {
+            "name": "willianavila",
+            "email": "williandeavila@gmail.com"
+        }
+    ],
+    "require": {}
+}
