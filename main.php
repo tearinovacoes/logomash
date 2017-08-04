@@ -1,11 +1,19 @@
 <?php
 	
+	//die(getenv("DATABASE_URL"));
 
-	$dbc=pg_connect ("host=ec2-107-22-160-199.compute-1.amazonaws.com dbname=de95k2h7i04tho port=5432 user=ubzgoiaxrmyjyt password=05ac9edd232c127b8b45b7e3672a69be8fba0a42447e26b8a1675c5946c5881e") or die(pg_error());
-	//$dbc=pg_connect ("host=localhost dbname=facemash1 port=5432 user=postgres password=1q2w3e") or die(pg_error());
-	//$dbc=parse_url(getenv("DATABASE_URL"));
+ 	$dbc=parse_url(getenv("DATABASE_URL"));
+	
+    $host = $dbc["host"];
+    $user = $dbc["user"];
+    $dbname = ltrim($dbc["path"],'/');
+    $pass = $dbc["pass"];
+    $port = $dbc["port"];
+	
+	pg_connect ('port='.$port.' sslmode=require host='.$host.' user='.$user.' dbname='.$dbname.' password='.$pass); 
+	
 	$using="use logomashed";
-	$query=pg_query($dbc, "select *from logomashed") or die ("Here it broke");
+	$query=pg_query($dbc, "select * from logomashed") or die ("Here it broke");
 		if($_REQUEST!=NULL){
 		$winner=$_REQUEST['won'];
 		$loser=$_REQUEST['lost'];
@@ -56,25 +64,25 @@
 </head>
 <body>
 <div class="container">
-	<div class="header"><h1>Votação de logo Projeto AURORA</h1></div>
+	<div class="header"><img style='float: left;' src="img/logo.png" alt="Tear Inovações" height="100" width="100"><h1>Votação de logo Projeto AURORA</h1></div>
 
 	<div class="description">
-	<p style='margin-left: 20%; margin-right: 20%;'>A escolha será feita observados os seguintes itens: representação da identidade do Projeto, identificação da missão e valores do Projeto, participação colaborativa dos envolvidos, criatividade, inovação.</br>
+	<p style='text-align: justify; margin-left: 20%; margin-right: 20%;'>A escolha será feita observados os seguintes itens: representação da identidade do Projeto, identificação da missão e valores do Projeto, participação colaborativa dos envolvidos, criatividade, inovação.
 Qual desenho melhor representa a identidade do Projeto Aurora?</p>
-	<h3>Qual desenho melhor representa a identidade do Projeto Aurora?</h3>
+	<h3>Qual desenho melhor representa a identidade do Projeto Aurora?</p>
 	</div>
 	<div class="pics-container">
 	<table class="pics">
-	<tr>
-	<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="facepics/image(<?php echo $random1; ?>).jpg" class="images"/></a></td>
-	<td>OR</td>
-	<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="facepics/image(<?php echo $random2; ?>).jpg" class="images"/></a></td>
-	<tr>
-	<td>Rating:<?php echo $ratingA; ?></td><td></td><td>Rating: <?php echo $ratingB; ?></td>
+		<tr>
+			<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="img/image(<?php echo $random1; ?>).jpg" class="images"/></a></td>
+			<td>OU</td>
+			<td><a href='main.php?<?php echo "won=$random1&lost=$random2"; ?>'><img src="img/image(<?php echo $random2; ?>).jpg" class="images"/></a></td>
+		<tr>
+			<td>Rating:<?php echo $ratingA; ?></td><td></td><td>Rating: <?php echo $ratingB; ?></td>
 	</table>
 	</div>
 
-	<div class="footer"> <table class="footer-links"><td>Escolas Inovadoras de Viamão</td></table></div>
+	<div class="footer"><h4><strong>Escolas Inovadoras de Viamão</strong></h4></div>
 </div>
 </body>
 
