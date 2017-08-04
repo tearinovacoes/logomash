@@ -1,14 +1,15 @@
 <?php
 	
 	//die(getenv("DATABASE_URL"));
-$dbopts = parse_url(getenv('DATABASE_URL'));
-$app->register(new Herrera\Pdo\PdoServiceProvider(),
-               array(
-                   'pdo.dsn' => 'pgsql:dbname='.ltrim($dbopts["path"],'/').';host='.$dbopts["host"] . ';port=' . $dbopts["port"],
-                   'pdo.username' => $dbopts["user"],
-                   'pdo.password' => $dbopts["pass"]
-               )
-); 
+	$dbopts=parse_url(getenv("DATABASE_URL"));
+	
+    $host = $dbopts["host"];
+    $user = $dbopts["user"];
+    $dbname = ltrim($dbopts["path"],'/');
+    $pass = $dbopts["pass"];
+    $port = $dbopts["port"];
+	
+	new PDO('pgsql:port='.$port.' sslmode=require host='.$host.' user='.$user.' dbname='.$dbname.' password='.$pass);  
 	
 	$using="use logomashed";
 	$query=pg_query($dbopts, "select * from logomashed") or die ("Here it broke");
