@@ -1,15 +1,17 @@
 <?php
 	
 
-	$dbc=pg_connect ("host=localhost dbname=facemash1 port=5432 user=postgres password=1q2w3e") or die(pg_error());
-	$using="use facemash";
-	$query=pg_query($dbc, "select *from facemashed") or die ("Here it broke");
+	$dbc=pg_connect ("host=ec2-107-22-160-199.compute-1.amazonaws.com dbname=de95k2h7i04tho port=5432 user=ubzgoiaxrmyjyt password=05ac9edd232c127b8b45b7e3672a69be8fba0a42447e26b8a1675c5946c5881e") or die(pg_error());
+	//$dbc=pg_connect ("host=localhost dbname=facemash1 port=5432 user=postgres password=1q2w3e") or die(pg_error());
+	//$dbc=parse_url(getenv("DATABASE_URL"));
+	$using="use logomashed";
+	$query=pg_query($dbc, "select *from logomashed") or die ("Here it broke");
 		if($_REQUEST!=NULL){
 		$winner=$_REQUEST['won'];
 		$loser=$_REQUEST['lost'];
 		$base_rating=1400;
-		$query2=pg_fetch_array(pg_query($dbc, "select rating from facemashed where id=$winner"));
-		$query3=pg_fetch_array(pg_query($dbc, "select rating from facemashed where id=$loser"));
+		$query2=pg_fetch_array(pg_query($dbc, "select rating from logomashed where id=$winner"));
+		$query3=pg_fetch_array(pg_query($dbc, "select rating from logomashed where id=$loser"));
 		$winner_rating=$query2['rating'];
 		$loser_rating=$query3['rating'];
 
@@ -25,8 +27,8 @@
 			$winner_rating = $winner_rating + $Kw*(1-$prob_winner);
 			$loser_rating = $loser_rating + $Kw*(0-$prob_loser);
 
-		$updatequery=pg_query($dbc,"update facemashed set rating=$winner_rating where id=$winner") or die(pg_error($dbc));
-		$updatequery=pg_query($dbc,"update facemashed set rating=$loser_rating where id=$loser") or die(pg_error($dbc));
+		$updatequery=pg_query($dbc,"update logomashed set rating=$winner_rating where id=$winner") or die(pg_error($dbc));
+		$updatequery=pg_query($dbc,"update logomashed set rating=$loser_rating where id=$loser") or die(pg_error($dbc));
 	}
 		
 		//This variable tells the total number of pics. Update it.
@@ -40,8 +42,8 @@
 			$random2=rand(1,$max_ppl);
 		}
 
-		$rating1=pg_fetch_array(pg_query($dbc,"select rating from facemashed where id=$random1"));
-		$rating2=pg_fetch_array(pg_query($dbc,"select rating from facemashed where id=$random2"));
+		$rating1=pg_fetch_array(pg_query($dbc,"select rating from logomashed where id=$random1"));
+		$rating2=pg_fetch_array(pg_query($dbc,"select rating from logomashed where id=$random2"));
 		$ratingA=$rating1['rating'];
 		$ratingB=$rating2['rating'];
 
@@ -54,11 +56,12 @@
 </head>
 <body>
 <div class="container">
-	<div class="header"><h1>FACEMASH</h1></div>
+	<div class="header"><h1>Votação de logo Projeto AURORA</h1></div>
 
 	<div class="description">
-	<h4> We let you judge and rate people, be it on their looks or personality. The criteria, it's in your hands!</h4>
-	<h3>Who's better?</h3>
+	<p style='margin-left: 20%; margin-right: 20%;'>A escolha será feita observados os seguintes itens: representação da identidade do Projeto, identificação da missão e valores do Projeto, participação colaborativa dos envolvidos, criatividade, inovação.</br>
+Qual desenho melhor representa a identidade do Projeto Aurora?</p>
+	<h3>Qual desenho melhor representa a identidade do Projeto Aurora?</h3>
 	</div>
 	<div class="pics-container">
 	<table class="pics">
@@ -71,7 +74,7 @@
 	</table>
 	</div>
 
-	<div class="footer"> <table class="footer-links"><td>About</td>.<td>Rating</td></table></div>
+	<div class="footer"> <table class="footer-links"><td>Escolas Inovadoras de Viamão</td></table></div>
 </div>
 </body>
 
