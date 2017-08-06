@@ -3,4 +3,6 @@ body{
 	padding: 0px;
 	text-align: center;
 	font-family: verdana;
+	background-image: url("../img/site/background.png");
+	background-size: 450px 450px;
 }
